@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" type="text/css" media="screen" href="main.css" />
+    <title>BattleShip</title>
+    <style>
+      body {
+        background-color: black;
+      }
+
+      div#board {
+        position: relative;
+        width: 1024px;
+        height: 863px;
+        margin: auto;
+        background: url('assets/chapter8/board.jpg');
+      }
+
+      div#messageArea {
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        color: rgb (83, 175, 19);
+      }
+
+      table {
+        position: absolute;
+        left: 173px;
+        top: 98px;
+        border-spacing: 0px;
+      }
+
+      td {
+        width: 94px;
+        height: 94px;
+      }
+
+      form {
+        position: absolute;
+        bottom: 0px;
+        right: 0px;
+        padding: 15px;
+        background-color: rgba(83, 175, 19);
+      }
+
+      form input {
+        background-color: rgba(152, 207, 113);
+        border-color: rgb(207, 169, 113);
+        font-size: 1em;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- <p>Click the following button to see the function in action</p>
+    <input type="button" onclick="play()" value="PLAY" /> -->
+    <div id="board">
+      <script>
+        for (var i = 0; i < 6; i++) {
+          <table>
+            <tr>
+              <td id='01'></td>
+              <td id='01'></td>
+              <td id='02'></td>
+              <td id='03'></td>
+              <td id='04'></td>
+              <td id='05'></td>
+            </tr>
+          </table>;
+        }
+      </script>
+      <div id="messageArea"></div>
+      <table>
+        <tr>
+          <td id="00"></td>
+          <td id="01"></td>
+          <td id="02"></td>
+          <td id="03"></td>
+          <td id="04"></td>
+          <td id="05"></td>
+        </tr>
+      </table>
+      <form>
+        <input type="text" id="guessInput" placeholder="A0" />
+        <input type="button" id="fireButton" value="Fire" />
+      </form>
+    </div>
+    <script src="battleship.js"></script>
+  </body>
+</html>
