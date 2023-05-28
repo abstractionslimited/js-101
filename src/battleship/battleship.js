@@ -86,5 +86,6 @@ view.displayMiss('55');
 view.displayHit('12');
 view.displayMiss('25');
 view.displayHit('26');
+view.displayHit('22');
 
 module.exports = { play, View };
