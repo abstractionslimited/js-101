@@ -59,4 +59,32 @@ let play = (value) => {
   }
 };
 
-module.exports = play;
+/**
+ * - It is backend code responsible for updating the display or UI see line 70
+ * This makes it easy to test view in isolation
+ */
+
+const view = {
+  displayMessage: function (msg) {
+    var messageArea = document.getElementById('messageArea');
+    messageArea.innerHTML = msg;
+  },
+
+  displayHit: function (location) {
+    var cell = document.getElementById(location);
+    cell.setAttribute('class', 'hit');
+  },
+  displayMiss: function (location) {
+    var cell = document.getElementById(location);
+    cell.setAttribute('class', 'miss');
+  }
+};
+
+view.displayMiss('00');
+view.displayHit('34');
+view.displayMiss('55');
+view.displayHit('12');
+view.displayMiss('25');
+view.displayHit('26');
+
+module.exports = { play, View };
