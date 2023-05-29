@@ -80,7 +80,44 @@ const view = {
   }
 };
 
-view.displayMiss('00');
+/**
+ * This is where we keep the state (number of guesses, hit or miss) of the game
+ * contains logic (determine if guess is hit or miss) relating to how the state changes
+ * e.g.
+ */
+
+const Model = {
+  numShops: 2,
+  boardSize: 7,
+  shipLength: 3,
+  shipsSunk: 0,
+  ships: [
+    {
+      hits: ['', '', ''],
+      location: ['10', '20', '30']
+    },
+    {
+      hits: ['', '', ''],
+
+      location: ['32', '33', '34']
+    },
+    {
+      hits: ['', '', 'hit'],
+      location: ['63', '64', '65']
+    }
+  ],
+  // ship can have 3 hits
+  hits: ['', '', ''],
+
+  // we have to be able to add those hits
+  location: ['32', '33', '34']
+
+  // logic checks
+};
+
+view.displayMiss('16');
+view.displayMiss('15');
+view.displayMiss('23');
 view.displayHit('34');
 view.displayMiss('55');
 view.displayHit('12');
