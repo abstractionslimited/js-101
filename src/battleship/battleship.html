@@ -54,9 +54,32 @@
 
       .miss {
         background: url('assets/chapter8/miss.png') no-repeat center;
+        opacity: 0;
+        animation: fade-in 0.5s ease-in-out forwards;
       }
+
+      @keyframes fade-in {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+
       .hit {
         background: url('assets/chapter8/ship.png') no-repeat center;
+        transform: scale(0);
+        animation: zoom-in 0.5s ease-in-out forwards;
+      }
+
+      @keyframes zoom-in {
+        from {
+          transform: scale(0);
+        }
+        to {
+          transform: scale(1);
+        }
       }
     </style>
   </head>
@@ -69,7 +92,7 @@
         <div id="messageArea"></div>
         <table>
           <tr>
-            <td id="00" class="hit"></td>
+            <td id="00" class="miss"></td>
             <td id="01"></td>
             <td id="02"></td>
             <td id="03"></td>

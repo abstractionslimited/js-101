@@ -1,5 +1,4 @@
 // PSUEDOCODE to CODE example
-
 let play = (value) => {
   // DECLARE three variables to hold the location of each cell of the sheep
   // Lets call them location1, location2, and location3
@@ -86,43 +85,78 @@ const view = {
  * e.g.
  */
 
-const Model = {
-  numShops: 2,
+const model = {
+  numShips: 2,
   boardSize: 7,
   shipLength: 3,
   shipsSunk: 0,
   ships: [
     {
       hits: ['', '', ''],
-      location: ['10', '20', '30']
+      locations: ['10', '20', '30']
     },
     {
       hits: ['', '', ''],
 
-      location: ['32', '33', '34']
+      locations: ['32', '33', '34']
     },
     {
       hits: ['', '', 'hit'],
-      location: ['63', '64', '65']
+      locations: ['63', '64', '65']
     }
   ],
-  // ship can have 3 hits
-  hits: ['', '', ''],
 
-  // we have to be able to add those hits
-  location: ['32', '33', '34']
+  fire: function (guess) {
+    console.log(guess);
 
-  // logic checks
+    for (let i = 0; i < this.numShips; i++) {
+      var ship = this.ships[i];
+      var index = ship.locations.indexOf(guess); // this is called chaining
+      if (index >= 0) {
+        ship.hits[index] = 'hit';
+        view.displayHit(guess);
+        view.displayMessage('HIT!');
+        if (isSunk(ship)) {
+          view.displayMessage('You sank my battleship!');
+          this.shipsSunk++;
+        }
+        return true;
+      }
+    }
+    view.displayMiss(guess);
+    view.displayMessage('Missed!');
+
+    return false;
+  },
+
+  isSunk: (ship) => {
+    const { locations } = ship;
+    for (let i = 0; i < locations.length; i++) {
+      if (locations[i] !== 'hit') {
+        return false;
+      }
+    }
+    // TODO: view.displayMessage('You sunk my battleship');
+    return true;
+  }
 };
 
-view.displayMiss('16');
-view.displayMiss('15');
-view.displayMiss('23');
-view.displayHit('34');
-view.displayMiss('55');
-view.displayHit('12');
-view.displayMiss('25');
-view.displayHit('26');
-view.displayHit('22');
+// view.displayMiss('16');
+// view.displayMiss('15');
+// view.displayMiss('23');
+// view.displayHit('34');
+// view.displayMiss('55');
+// view.displayHit('12');
+// view.displayMiss('25');
+// view.displayHit('26');
+// view.displayHit('22');
 
-module.exports = { play, View };
+// model.fire('53');
+// model.fire('00');
+model.fire('10');
+// model.fire('11');
+// model.fire('21');
+// model.fire('15');
+// model.fire('16');
+// model.fire('14');
+// model.fire('13');
