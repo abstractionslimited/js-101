@@ -184,9 +184,36 @@ var controller = {
   }
 };
 
-console.log(controller.processGuess('A6'));
-console.log(controller.processGuess('B6'));
-console.log(controller.processGuess('C6'));
-console.log(controller.processGuess('B0'));
-console.log(controller.processGuess('B1'));
-console.log(controller.processGuess('B2'));
+function init() {
+  var fireButton = document.getElementById('fireButton');
+
+  fireButton.onclick = handleFireButton;
+
+  var guessInput = document.getElementById('guessInput');
+  guessInput.onkeypress = handleGuessInput;
+}
+
+function handleFireButton(params) {
+  var guessInput = document.getElementById('guessInput');
+  var guess = guessInput.value;
+  controller.processGuess(guess);
+  var guess = '';
+}
+
+function handleGuessInput(e) {
+  var fireButton = document.getElementById('fireButton');
+
+  if (e.keyCode === 13) {
+    fireButton.click();
+    return false;
+  }
+}
+
+window.onload = init;
+
+// console.log(controller.processGuess('A6'));
+// console.log(controller.processGuess('B6'));
+// console.log(controller.processGuess('C6'));
+// console.log(controller.processGuess('B0'));
+// console.log(controller.processGuess('B1'));
+// console.log(controller.processGuess('B2'));
