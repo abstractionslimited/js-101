@@ -90,6 +90,7 @@ const model = {
   boardSize: 7,
   shipLength: 3,
   shipsSunk: 0,
+  guesses: 0,
   ships: [
     {
       hits: ['', '', ''],
@@ -141,57 +142,51 @@ const model = {
   }
 };
 
-const controller = {
-  guess: 0,
+function parseGuess(guess) {
+  var alphabet = ['A', 'B', 'C', 'D', 'E', 'F', 'G'];
+
+  if (guess === null || guess.length !== 2) {
+    alert('Oops, please enter a letter and a number on the board.');
+  } else {
+    var row = alphabet.indexOf(guess.charAt(0));
+    var column = guess.charAt(1);
+
+    if (isNaN(row) || isNaN(column)) {
+      alert("Oops, that isn't on the board.");
+    } else if (
+      row < 0 ||
+      row >= model.boardSize ||
+      column < 0 ||
+      column >= model.boardSize
+    ) {
+      alert("Oops, that's off the board!");
+    } else {
+      return row + column;
+    }
+  }
+  return null;
+}
+
+var controller = {
+  guesses: 0,
 
   processGuess: function (guess) {
-    if (guess === null || guess.length !== 2) {
-      alert('Oops invalid guess entered!');
-    }
-  },
-
-  parseGuess: function (guess) {
-    const alphabets = ['A', 'B', 'C', 'D', 'E', 'F', 'G'];
-    if (guess === null || guess.length !== 2) {
-      alert('Oops invalid guess entered!');
-    } else {
-      const firstChar = guess.charAt(0);
-      const row = alphabets.indexOf(firstChar);
-      var column = guess.charAt(1);
-
-      if (isNaN(row) || isNaN(column)) {
-        alert('Invalid guess entered!');
-      } else if (
-        row < 0 ||
-        row >= model.boardSize ||
-        column < 0 ||
-        column >= model.boardSize
-      ) {
-        alert('Invalid guess entered!');
+    var location = parseGuess(guess);
+    if (location) {
+      this.guesses++;
+      var hit = model.fire(location);
+      if (hit && model.shipsSunk === model.numShips) {
+        view.displayMessage(
+          'You sank all my battleships, in ' + this.guesses + ' guesses'
+        );
       }
-      return row;
     }
-  } // parse
+  }
 };
 
-// view.displayMiss('16');
-// view.displayMiss('15');
-// view.displayMiss('23');
-// view.displayHit('34');
-// view.displayMiss('55');
-// view.displayHit('12');
-// view.displayMiss('25');
-// view.displayHit('26');
-// view.displayHit('22');
-
-// model.fire('53');
-// model.fire('00');
-model.fire('10');
-model.fire('22');
-model.fire('23');
-// model.fire('11');
-// model.fire('21');
-// model.fire('15');
-// model.fire('16');
-// model.fire('14');
-// model.fire('13');
+console.log(controller.processGuess('A6'));
+console.log(controller.processGuess('B6'));
+console.log(controller.processGuess('C6'));
+console.log(controller.processGuess('B0'));
+console.log(controller.processGuess('B1'));
+console.log(controller.processGuess('B2'));
