@@ -116,7 +116,7 @@ const model = {
         ship.hits[index] = 'hit';
         view.displayHit(guess);
         view.displayMessage('HIT!');
-        if (isSunk(ship)) {
+        if (this.isSunk(ship)) {
           view.displayMessage('You sank my battleship!');
           this.shipsSunk++;
         }
@@ -141,6 +141,39 @@ const model = {
   }
 };
 
+const controller = {
+  guess: 0,
+
+  processGuess: function (guess) {
+    if (guess === null || guess.length !== 2) {
+      alert('Oops invalid guess entered!');
+    }
+  },
+
+  parseGuess: function (guess) {
+    const alphabets = ['A', 'B', 'C', 'D', 'E', 'F', 'G'];
+    if (guess === null || guess.length !== 2) {
+      alert('Oops invalid guess entered!');
+    } else {
+      const firstChar = guess.charAt(0);
+      const row = alphabets.indexOf(firstChar);
+      var column = guess.charAt(1);
+
+      if (isNaN(row) || isNaN(column)) {
+        alert('Invalid guess entered!');
+      } else if (
+        row < 0 ||
+        row >= model.boardSize ||
+        column < 0 ||
+        column >= model.boardSize
+      ) {
+        alert('Invalid guess entered!');
+      }
+      return row;
+    }
+  } // parse
+};
+
 // view.displayMiss('16');
 // view.displayMiss('15');
 // view.displayMiss('23');
@@ -154,6 +187,8 @@ const model = {
 // model.fire('53');
 // model.fire('00');
 model.fire('10');
+model.fire('22');
+model.fire('23');
 // model.fire('11');
 // model.fire('21');
 // model.fire('15');
