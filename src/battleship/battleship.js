@@ -1,69 +1,13 @@
-// PSUEDOCODE to CODE example
-let play = (value) => {
-  // DECLARE three variables to hold the location of each cell of the sheep
-  // Lets call them location1, location2, and location3
-  var location1 = Math.floor(Math.random() * 5),
-    location2 = location1 + 1,
-    location3 = location1 + 2;
-  // DECLARE a variable to hold the user's current guess.
-  // Let's call it guess.
+// To use this tester file, you'll need to leave the view, model, controller
+// objects in place, but comment out all the testing code except the parts
+// you're using.  Remember you can use
+/* 
+   code here 
+*/
+// to comment out large chunks of code.
 
-  var guess = 0;
-  // DECLARE a variable to hold the number of hits.
-  // We'll call it hits and set it to 0;
-  var hits = 0;
-  // DECLARE a variable to hold the number of guesses.
-  var guesses = 0;
-  // DECLARE a variable to keep track of whether the ship is sunk or not.
-  // Let's call it isSunk and set it to false.
-  var isSunk = false;
-
-  // LOOP: While the ship is not sunk
-  while (!isSunk) {
-    // ---> GET the user's guess
-    guess = prompt('ready, aim, fire! [Enter a number 0-6]');
-    console.log(guess);
-    // This condition is true if  guess is less than zero OR guess is greater than 6
-    // ---> IF the user's guess is invalid
-    if (guess < 0 || guess > 6) {
-      // ------> TELL User to enter a valid number
-
-      alert('Please enter a valid cell number');
-    }
-    //ELSE User to enter a valid number
-    else {
-      // ADD one to guesses
-      guesses = guesses + 1;
-
-      // IF the user's guess matches a location
-      if (guess == location1 || guess == location2 || guess == location3) {
-        // ADD one to the number hits
-        hits = hits + 1;
-        alert('Oh Shit');
-
-        // IF number of hits is 3
-        if (hits == 3) {
-          // SET isSunk to true
-          isSunk = true;
-          // alert('You sank my battleship!');
-          var stats = `Your Stats:  you took ${guesses} to sink the battle ship which means your shooting accuracy was ${
-            3 / guesses
-          }`;
-          alert(stats);
-        }
-      } else {
-        alert('You missed');
-      }
-    }
-  }
-};
-
-/**
- * - It is backend code responsible for updating the display or UI see line 70
- * This makes it easy to test view in isolation
- */
-
-const view = {
+// testing the view
+var view = {
   displayMessage: function (msg) {
     var messageArea = document.getElementById('messageArea');
     messageArea.innerHTML = msg;
@@ -73,49 +17,46 @@ const view = {
     var cell = document.getElementById(location);
     cell.setAttribute('class', 'hit');
   },
+
   displayMiss: function (location) {
     var cell = document.getElementById(location);
     cell.setAttribute('class', 'miss');
   }
 };
 
-/**
- * This is where we keep the state (number of guesses, hit or miss) of the game
- * contains logic (determine if guess is hit or miss) relating to how the state changes
- * e.g.
- */
+view.displayMiss('00');
+view.displayHit('34');
+view.displayMiss('55');
+view.displayHit('12');
+view.displayMiss('25');
+view.displayHit('26');
 
-const model = {
-  numShips: 2,
+view.displayMessage('Tap tap, is this thing on?');
+
+// testing the model
+
+var model = {
   boardSize: 7,
+  numShips: 3,
   shipLength: 3,
   shipsSunk: 0,
-  guesses: 0,
+
   ships: [
-    {
-      locations: [0, 0, 0],
-      hits: ['', '', '']
-    },
-    {
-      locations: [0, 0, 0],
-      hits: [0, '', '']
-    },
-    {
-      locations: [0, 0, 0],
-      hits: ['', '', '']
-    }
+    { locations: ['06', '16', '26'], hits: ['', '', ''] },
+    { locations: ['24', '34', '44'], hits: ['', '', ''] },
+    { locations: ['10', '11', '12'], hits: ['', '', ''] }
   ],
 
   fire: function (guess) {
-    console.log(guess);
-
-    for (let i = 0; i < this.numShips; i++) {
+    for (var i = 0; i < this.numShips; i++) {
       var ship = this.ships[i];
-      var index = ship.locations.indexOf(guess); // this is called chaining
+      var index = ship.locations.indexOf(guess);
+
       if (index >= 0) {
         ship.hits[index] = 'hit';
         view.displayHit(guess);
         view.displayMessage('HIT!');
+
         if (this.isSunk(ship)) {
           view.displayMessage('You sank my battleship!');
           this.shipsSunk++;
@@ -124,57 +65,60 @@ const model = {
       }
     }
     view.displayMiss(guess);
-    view.displayMessage('Missed!');
-
+    view.displayMessage('You missed.');
     return false;
   },
 
-  isSunk: (ship) => {
-    const { locations } = ship;
-    for (let i = 0; i < locations.length; i++) {
-      if (locations[i] !== 'hit') {
+  isSunk: function (ship) {
+    for (var i = 0; i < this.shipLength; i++) {
+      if (ship.hits[i] !== 'hit') {
         return false;
       }
     }
-    // TODO: view.displayMessage('You sunk my battleship');
     return true;
   },
 
   generateShipLocations: function () {
+    var locations;
+    for (var i = 0; i < this.numShips; i++) {
+      do {
+        locations = this.generateShip();
+      } while (this.collision(locations));
+      this.ships[i].locations = locations;
+    }
+    console.log('Ships array: ');
+    console.log(this.ships);
+  },
+
+  generateShip: function () {
     var direction = Math.floor(Math.random() * 2);
-    var row;
-    var col;
+    var row, col;
 
     if (direction === 1) {
+      // horizontal
       row = Math.floor(Math.random() * this.boardSize);
-      col = Math.floor(
-        Math.random() * (this.boardSize - (this.shipLength + 1))
-      );
+      col = Math.floor(Math.random() * (this.boardSize - this.shipLength + 1));
     } else {
+      // vertical
+      row = Math.floor(Math.random() * (this.boardSize - this.shipLength + 1));
       col = Math.floor(Math.random() * this.boardSize);
-      row = Math.floor(
-        Math.random() * (this.boardSize - (this.shipLength + 1))
-      );
     }
 
     var newShipLocations = [];
-
     for (var i = 0; i < this.shipLength; i++) {
       if (direction === 1) {
-        newShipLocations.push(row + '' + (col + 1));
+        newShipLocations.push(row + '' + (col + i));
       } else {
-        newShipLocations.push(row + 1 + '' + col);
+        newShipLocations.push(row + i + '' + col);
       }
     }
     return newShipLocations;
   },
 
   collision: function (locations) {
-    for (let i = 0; i < this.numShips; i++) {
-      const element = model.ships[i];
-
-      for (let j = 0; j < locations.length; j++) {
-        const element = array[j];
+    for (var i = 0; i < this.numShips; i++) {
+      var ship = this.ships[i];
+      for (var j = 0; j < locations.length; j++) {
         if (ship.locations.indexOf(locations[j]) >= 0) {
           return true;
         }
@@ -183,6 +127,24 @@ const model = {
     return false;
   }
 };
+
+/*
+model.fire("53"); // miss
+
+model.fire("06"); // hit
+model.fire("16"); // hit
+model.fire("26"); // hit
+
+model.fire("34"); // hit
+model.fire("24"); // hit
+model.fire("44"); // hit
+
+model.fire("12"); // hit
+model.fire("11"); // hit
+model.fire("10"); // hit
+*/
+
+// testing parseGuess
 function parseGuess(guess) {
   var alphabet = ['A', 'B', 'C', 'D', 'E', 'F', 'G'];
 
@@ -208,6 +170,17 @@ function parseGuess(guess) {
   return null;
 }
 
+/*
+console.log("Testing parseGuess");
+console.log(parseGuess("A0"));
+console.log(parseGuess("B6"));
+console.log(parseGuess("G3"));
+console.log(parseGuess("H0")); // invalid
+console.log(parseGuess("A7")); // invalid
+*/
+
+// testing the controller
+
 var controller = {
   guesses: 0,
 
@@ -225,37 +198,20 @@ var controller = {
   }
 };
 
-function init() {
-  var fireButton = document.getElementById('fireButton');
+// You should see three ships on the board, one miss, and the message
+// "You sank all my battleships in 10 guesses"
+/*
+controller.processGuess("A0"); // miss
 
-  fireButton.onclick = handleFireButton;
+controller.processGuess("A6"); // hit
+controller.processGuess("B6"); // hit
+controller.processGuess("C6"); // hit
 
-  var guessInput = document.getElementById('guessInput');
-  guessInput.onkeydown = handleGuessInput;
-  model.generateShipLocations();
-}
+controller.processGuess("C4"); // hit
+controller.processGuess("D4"); // hit
+controller.processGuess("E4"); // hit
 
-function handleFireButton(params) {
-  var guessInput = document.getElementById('guessInput');
-  var guess = guessInput.value;
-  controller.processGuess(guess);
-  var guess = '';
-}
-
-function handleGuessInput(e) {
-  var fireButton = document.getElementById('fireButton');
-
-  if (e.keyCode === 13) {
-    fireButton.click();
-    return false;
-  }
-}
-
-window.onload = init;
-
-// console.log(controller.processGuess('A6'));
-// console.log(controller.processGuess('B6'));
-// console.log(controller.processGuess('C6'));
-// console.log(controller.processGuess('B0'));
-// console.log(controller.processGuess('B1'));
-// console.log(controller.processGuess('B2'));
+controller.processGuess("B0"); // hit
+controller.processGuess("B1"); // hit
+controller.processGuess("B2"); // hit
+*/
