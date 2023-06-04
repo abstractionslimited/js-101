@@ -93,17 +93,16 @@ const model = {
   guesses: 0,
   ships: [
     {
-      hits: ['', '', ''],
-      locations: ['10', '20', '30']
+      locations: [0, 0, 0],
+      hits: ['', '', '']
     },
     {
-      hits: ['', '', ''],
-
-      locations: ['32', '33', '34']
+      locations: [0, 0, 0],
+      hits: [0, '', '']
     },
     {
-      hits: ['', '', 'hit'],
-      locations: ['63', '64', '65']
+      locations: [0, 0, 0],
+      hits: ['', '', '']
     }
   ],
 
@@ -141,7 +140,7 @@ const model = {
     return true;
   },
 
-  generateShip: function () {
+  generateShipLocations: function () {
     var direction = Math.floor(Math.random() * 2);
     var row;
     var col;
@@ -233,6 +232,7 @@ function init() {
 
   var guessInput = document.getElementById('guessInput');
   guessInput.onkeydown = handleGuessInput;
+  model.generateShipLocations();
 }
 
 function handleFireButton(params) {
