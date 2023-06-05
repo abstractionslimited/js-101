@@ -7,13 +7,20 @@
       body {
         margin: 20px;
       }
+
+      img {
+        margin: 20px;
+      }
     </style>
     <script>
       window.onload = init;
 
       function init() {
-        var image = document.getElementById('zero');
-        image.onclick = showAnswer;
+        var images = document.getElementsByName('img');
+
+        for (var i = 0; i < images.length; i++) {
+          images[i].onclick = showAnswer;
+        }
       }
 
       function showAnswer() {
@@ -25,5 +32,8 @@
 
   <body>
     <img id="zero" src="../assets/zeroblur.jpg" />
+    <img id="two" src="../assets/oneblur.jpg" />
+    <img id="three" src="../assets/twoblur.jpg" />
+    <img id="four" src="../assets/threeblur.jpg" />
   </body>
 </html>
