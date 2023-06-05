@@ -19,6 +19,8 @@
             var images = document.getElementsByTagName("img");
             for (var i = 0; i < images.length; i++) {
                 images[i].onclick = showAnswer;
+                images[i].onmouseover = showAnswer;
+                images[i].onmouseout = reblur;
             }
         };
     
@@ -31,10 +33,16 @@
             setTimeout(reblur, 2000, image)
         }
 
-        function reblur(image) {
-          var name = image.id;
-          name = '../assets/'+ name + "blur.jpg";
+        function reblur(e) {
+         var image = e.target;
+
+          name = '../assets/'+ image.id + "blur.jpg";
           image.src = name
+        }
+
+        function mouseWork(image) {
+        image.onmousever = showAnswer;
+        image.onmouseout = reblur;
         }
     
       </script>
