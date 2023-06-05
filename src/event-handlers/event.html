@@ -27,6 +27,14 @@
             var name = image.id;
             name = '../assets/'+ name + ".jpg";
             image.src = name;
+
+            setTimeout(reblur, 2000, image)
+        }
+
+        function reblur(image) {
+          var name = image.id;
+          name = '../assets/'+ name + "blur.jpg";
+          image.src = name
         }
     
       </script>
